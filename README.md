@@ -1,53 +1,62 @@
 # Smart Pantry Inventory
 
-Smart Pantry Inventory is a Flutter application for managing pantry items with an offline-first database, barcode scanning, OCR text extraction, and AI assistance (Gemini/OpenAI) for suggestions.
+แอป Flutter สำหรับจัดการวัตถุดิบ/ของในครัวแบบ **offline-first** พร้อมฟีเจอร์สแกนบาร์โค้ด, OCR (ML Kit) และ AI Assistant (Gemini/OpenAI)
 
-## Tech Stack
+## Tech Stack (สรุป)
 
 - Flutter + Dart
-- State management: `flutter_bloc`
-- DI: `get_it`
+- State Management: `flutter_bloc`
+- Dependency Injection: `get_it`
 - Routing: `auto_route`
-- Local DB (offline-first): `sqflite` (SQLite)
-- Key-value storage:
+- Local Database (Offline-first): `sqflite` (SQLite)
+- Key-Value Storage:
   - `SharedPreferences` (settings)
   - `Hive` (caching)
 - Networking: `dio` + interceptors
-- JSON serialization: `json_serializable`
-- On-device ML: Google ML Kit (text recognition, barcode scanning)
+- JSON Serialization: `json_serializable`
+- On-device ML: Google ML Kit (Text Recognition / Barcode)
 
-## Setup (No API Keys in Code)
+## วิธีรันโปรเจกต์ (Run)
 
-This project uses `flutter_dotenv` to load API keys from a local `.env` file.
+1) ติดตั้ง dependencies
 
-1. Create `.env` from the example file:
+```bash
+flutter pub get
+```
+
+2) รันแอป
+
+```bash
+flutter run
+```
+
+หมายเหตุ: ถ้าใช้ Emulator/Device ให้แน่ใจว่าเปิดอุปกรณ์ไว้ก่อน
+
+## ตั้งค่า API Key แบบปลอดภัย (No API Keys in Code)
+
+โปรเจกต์นี้ใช้ `flutter_dotenv` โหลดค่า API key จากไฟล์ `.env` (ไม่ผูกติดใน source code)
+
+1) สร้างไฟล์ `.env` จากตัวอย่าง
 
 ```bash
 copy .env.example .env
 ```
 
-2. Fill in your keys in `.env`:
+2) ใส่ค่า key ลงใน `.env`
 
 ```env
 GEMINI_API_KEY=YOUR_KEY
 OPENAI_API_KEY=YOUR_KEY
 ```
 
-IMPORTANT:
+ข้อสำคัญ:
 
-- Do not commit `.env`.
-- `.gitignore` already ignores `.env` and `.env.*`.
+- ห้าม commit `.env` ขึ้น GitHub
+- `.gitignore` ได้ ignore `.env` และ `.env.*` ไว้แล้ว
 
-## Run
+## การรัน Tests
 
-```bash
-flutter pub get
-flutter run
-```
-
-## Tests
-
-Unit + widget tests:
+Unit + Widget tests:
 
 ```bash
 flutter test
@@ -65,50 +74,37 @@ Static analysis:
 flutter analyze
 ```
 
-## Architecture
+## Architecture ที่ใช้
 
-This project follows Clean Architecture with Repository Pattern:
+โปรเจกต์ใช้แนวทาง **Clean Architecture + Repository Pattern** และแยกชั้นงานชัดเจน
 
+### โครงสร้างหลัก
+
+- `lib/features/*/presentation`
+  - UI Pages
+  - BLoC/Cubit (จัดการ state)
 - `lib/features/*/domain`
   - Entities
   - Repository interfaces
-  - Use cases
+  - Use cases (business logic)
 - `lib/features/*/data`
-  - Models (JSON / DB)
-  - Data sources (local / remote)
+  - Models (JSON/DB)
+  - Data sources (Local/Remote)
   - Repository implementations
-- `lib/features/*/presentation`
-  - Pages (UI)
-  - BLoC/Cubit
 
-Dependency injection is configured in:
+### Dependency Injection
 
 - `lib/injection_container.dart`
 
-App routing uses `auto_route`:
+### Routing (auto_route)
 
 - `lib/app/router/app_router.dart`
 
-## Key Features
+## ฟีเจอร์หลัก
 
-- CRUD inventory items (offline-first)
+- จัดการรายการของในคลัง (CRUD) แบบ offline-first
 - Search & dashboard summary
 - Barcode scanning
-- OCR: extract text from images into form fields
-- AI chat and AI suggestions (Gemini/OpenAI)
-- Light/Dark theme + language setting
-
-## Demonstration Video Checklist (5–10 minutes)
-
-- App launch + navigation (auto_route)
-- Add/Edit/Delete item (show validation)
-- Offline-first demo (turn off internet and show app still works)
-- Animation demo:
-  - Implicit animation (e.g., AnimatedOpacity/AnimatedScale)
-  - Explicit/Hero transition (List -> Detail)
-- AI demo:
-  - ML Kit: scan barcode / OCR extract text
-  - Cloud LLM: call Gemini/OpenAI feature
-- Run tests on screen:
-  - `flutter test`
-  - `flutter test integration_test`
+- OCR ช่วยกรอกข้อมูลจากฉลาก/รูป (ML Kit)
+- AI Chat / AI Suggestions (Gemini/OpenAI)
+- Light/Dark theme + ตั้งค่าภาษา
